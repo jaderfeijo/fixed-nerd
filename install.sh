@@ -50,6 +50,7 @@ text = open(path).read() if os.path.exists(path) else None
 if text is None and action == "remove":
     sys.exit(0)
 text = re.sub(r"(?ms)^" + re.escape(begin) + r"\n.*?^" + re.escape(end) + r"\n?", "", text or "")
+text = re.sub(r"\n{3,}", "\n\n", text)      # other installers leave blank lines behind; keep the file stable
 if action == "remove":
     text = text.rstrip("\n") + "\n" if text.strip() else ""
 else:
