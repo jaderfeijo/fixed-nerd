@@ -11,6 +11,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bdf
+import fallback_glyphs
 import powerline
 import rasterize_icons
 
@@ -52,6 +53,8 @@ def make_glyph(cp, rows):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbols", default=os.path.join(ROOT, "build/symbols/SymbolsNerdFontMono-Regular.ttf"))
+    ap.add_argument("--text-font", default="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+                    help="DejaVu Sans Mono (apt: fonts-dejavu-core), source of TUI symbol fallbacks")
     ap.add_argument("--upstream", default=os.path.join(ROOT, "upstream/6x13.bdf"))
     ap.add_argument("--out", default=os.path.join(ROOT, "build/fixed-nerd-6x13.bdf"))
     ap.add_argument("--verify", action="store_true", help="check upstream glyphs are unchanged")
@@ -69,6 +72,10 @@ def main():
         rows = rasterize_icons.rasterize(args.symbols, cp, mode)
         if rows and any("#" in r for r in rows):
             added[cp] = (name, rows)
+
+    for cp, (src, rows) in fallback_glyphs.glyphs(font.glyphs, args.text_font).items():
+        if cp not in added:
+            added[cp] = ("tui-" + src, rows)
 
     skipped = [cp for cp in added if cp in font.glyphs]
     for cp, (_, rows) in added.items():

@@ -40,10 +40,20 @@ The glyph selection and the vector sources come from the Nerd Fonts project
 (https://github.com/ryanoasis/nerd-fonts, Copyright (c) 2014 Ryan L McIntyre, MIT —
 `LICENSES/nerd-fonts-MIT.txt`).
 
+### TUI symbols (U+23xx, 26xx, 27xx, 29xx, 2Bxx, ...)
+
+About 50 glyphs that popular terminal UIs emit but the base font lacks (`scripts/tui_glyphs.py`):
+6 hand-drawn in `scripts/fallback_glyphs.py` (e.g. `❯ ❮ ⚠ ⏸`), 15 reuse existing upstream bitmaps (e.g. `⏺` = `●`),
+and the rest are bitmap conversions of **DejaVu Sans Mono** glyphs (scaled to a 6px advance, thresholded).
+DejaVu is Copyright (c) 2003 Bitstream, Inc.; DejaVu changes are public domain; Bitstream Vera license in
+`LICENSES/dejavu-bitstream-vera.txt`. That license permits modification and addition of glyphs provided the
+result is renamed without "Bitstream" or "Vera" (this font is "Fixed Nerd") and that the notice is kept.
+
 ### Deliberately excluded
 - Pomicons (U+E000–E00A) — OFL 1.1 with a Reserved Font Name; also collides with existing ConScript glyphs.
 - Weather Icons (U+E300–E3E3) — OFL 1.1 (a derivative font would have to be OFL).
 - Font Logos (U+F300–F381) — no license; these are distro/brand logos.
+- Wide/emoji-presentation symbols (e.g. ✨ ⚡ ⏩): xterm gives them two cells, which a 6px glyph cannot fill.
 - Material Design Icons (U+F0001+) — outside the 16-bit range that X11 core fonts support.
 
 ### A note on Font Awesome
