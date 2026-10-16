@@ -19,7 +19,7 @@ sleep 4
 DEMO
 # Xvfb ignores `xset +fp` for new directories, so pass the font path at server start.
 FP="$TMP,/usr/share/fonts/X11/misc,/usr/share/fonts/X11/100dpi/:unscaled,/usr/share/fonts/X11/75dpi/:unscaled,built-ins"
-xvfb-run -a -s "-screen 0 640x180x24 -fp $FP" sh -c "
+xvfb-run -a -s "-noreset -screen 0 640x180x24 -fp $FP" sh -c "
   xterm -u8 -fn '-jaderfeijo-FixedNerd-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1' \\
         -geometry 80x9+0+0 -e sh '$TMP/demo.sh' &
   sleep 2; import -window root '$OUT'; wait"

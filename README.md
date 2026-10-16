@@ -19,18 +19,21 @@ vectors. Glyphs outside the included sets (emoji, Material Design icons, brand l
 
 ```sh
 git clone https://github.com/jaderfeijo/fixed-nerd && cd fixed-nerd
-scripts/install.sh          # needs bdftopcf + mkfontdir (apt: xfonts-utils)
-uxterm -fn '-jaderfeijo-FixedNerd-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1'
+./install.sh                # needs bdftopcf + mkfontdir (apt: xfonts-utils); add --dry-run to look first
 ```
 
-Make it the default for xterm/uxterm in `~/.Xresources` (then `xrdb -merge ~/.Xresources`; new terminals only):
+It installs the font in `~/.local/share/fonts/X11/fixed-nerd`, and adds two clearly marked `fixed-nerd` blocks:
+`xset +fp` in the Window Maker autostart file (so the font path survives restarts) and
+`UXTerm*font` / `XTerm*font` in `~/.Xresources` (so xterm and uxterm use it by default). Terminals that are already
+open are never touched. `./install.sh --uninstall` removes the font and both blocks; `--no-xresources` and
+`--no-autostart` skip one of them. It is also available as the `fixed-nerd` item of
+[wmodern](https://github.com/jaderfeijo/wmodern).
 
-```
-XTerm*font: -jaderfeijo-FixedNerd-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1
-```
+Try it once without changing any setting:
+`uxterm -fn '-jaderfeijo-FixedNerd-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1'`
+(after `xset +fp ~/.local/share/fonts/X11/fixed-nerd`). For Powerlevel10k choose the *Nerd Font* style in `p10k configure`.
 
-and add `xset +fp ~/.local/share/fonts/X11/fixed-nerd` to your X startup so the font path survives restarts.
-For Powerlevel10k choose the *Nerd Font* style in `p10k configure`.
+> Note: `XTerm*...` resources do **not** apply to uxterm, whose window class is `UXTerm`; that is why both are set.
 
 ## Rebuild
 
@@ -50,7 +53,8 @@ scripts/preview.sh docs/preview.png    # renders on a throw-away Xvfb display
 | `scripts/tui_glyphs.py`, `scripts/fallback_glyphs.py` | curated codepoints used by coding-agent/git/system TUIs and how gaps are filled (hand-drawn, aliased, or DejaVu Sans Mono) |
 | `scripts/rasterize_icons.py` | glyph ranges + downsampling of Nerd Font icons to 6x13 |
 | `scripts/build.py` | merges everything; `--verify` proves upstream glyphs are unchanged |
-| `scripts/install.sh`, `scripts/preview.sh` | install for the current user / render a test image |
+| `install.sh` | install/uninstall for the current user (font, font path at login, xterm font) |
+| `scripts/preview.sh` | render a test image on a throw-away Xvfb display |
 
 ## Licenses and credit
 
